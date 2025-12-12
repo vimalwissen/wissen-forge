@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  training: one
+  status: 1
+  attendance: false
+  score: 1
+  completion_date: 2025-12-12 06:12:17
+
+two:
+  user: two
+  training: two
+  status: 1
+  attendance: false
+  score: 1
+  completion_date: 2025-12-12 06:12:17

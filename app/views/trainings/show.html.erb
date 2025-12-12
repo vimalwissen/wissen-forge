@@ -1,0 +1,72 @@
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 sm:px-6 flex justify-between">
+    <div>
+      <h3 class="text-lg leading-6 font-medium text-gray-900"><%= @training.title %></h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= @training.description %></p>
+    </div>
+    <div class="flex space-x-3">
+      <% if policy(@training).edit? %>
+        <%= link_to "Edit", edit_training_path(@training), class: "text-indigo-600 hover:text-indigo-900" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+    <dl class="sm:divide-y sm:divide-gray-200">
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Instructor</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @training.instructor %></dd>
+      </div>
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Schedule</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @training.start_time.strftime("%B %d, %Y %I:%M %p") %> - <%= @training.end_time.strftime("%I:%M %p") %>
+        </dd>
+      </div>
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Type & Mode</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @training.training_type.humanize %> / <%= @training.mode.humanize %>
+        </dd>
+      </div>
+      <% if @training.classroom? %>
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Capacity</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= @training.enrollments.count %> / <%= @training.capacity %>
+          </dd>
+        </div>
+      <% end %>
+      
+      <!-- Enrollment Status / Action -->
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">My Status</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <% if @enrollment %>
+            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
+              <%= @enrollment.status.humanize %>
+            </span>
+          <% else %>
+            <%= button_to "Enroll Now", training_enrollments_path(@training), method: :post, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none" %>
+          <% end %>
+        </dd>
+      </div>
+
+       <!-- Assignments Section -->
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">Assignments</dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+           <% if @training.assignments.any? %>
+             <ul class="list-disc pl-5 space-y-1">
+               <% @training.assignments.each do |assignment| %>
+                 <li><%= link_to assignment.title, training_assignment_path(@training, assignment), class: "text-indigo-600 hover:underline" %> (Due: <%= assignment.due_date.to_date %>)</li>
+               <% end %>
+             </ul>
+           <% else %>
+             No assignments.
+           <% end %>
+        </dd>
+      </div>
+
+    </dl>
+  </div>
+</div>
