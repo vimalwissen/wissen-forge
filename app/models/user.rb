@@ -16,4 +16,17 @@ class User < ApplicationRecord
 
   validates :name, presence: true
   validates :role, presence: true
+
+  def acquired_skills
+    # Get all training IDs where enrollment is completed
+    completed_training_ids = enrollments.completed.pluck(:training_id)
+    
+    # Fetch skills from those trainings
+    Training.where(id: completed_training_ids)
+            .pluck(:skills)
+            .flatten
+            .compact
+            .reject(&:blank?)
+            .uniq
+  end
 end

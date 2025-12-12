@@ -6,8 +6,9 @@ class AssignmentsController < ApplicationController
   end
 
   def show
-    @assignment = Assignment.find(params[:id])
+    @training = Training.find(params[:training_id])
+    @assignment = @training.assignments.find(params[:id])
     authorize @assignment
-    @submission = @assignment.submissions.find_by(user: current_user) || @assignment.submissions.new
+    @my_submission = @assignment.submissions.find_by(user: current_user)
   end
 end

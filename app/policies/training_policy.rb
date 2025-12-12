@@ -37,8 +37,8 @@ class TrainingPolicy < ApplicationPolicy
       if user.admin? || user.super_admin?
         scope.all
       else
-        # Employees see published trainings, or trainings they are enrolled in
-        scope.where(status: :published).or(scope.where(id: user.training_ids))
+        # All employees can see all published trainings
+        scope.published.or(scope.where(id: user.training_ids))
       end
     end
   end

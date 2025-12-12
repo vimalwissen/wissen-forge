@@ -3,10 +3,16 @@ Rails.application.routes.draw do
   
   get "dashboard", to: "dashboard#index"
   resource :profile, only: [:show]
+  resources :users, only: [:show], controller: 'profiles'
   resources :certificates, only: [:show], param: :badge_id
   resources :reports, only: [:index]
   
   resources :trainings do
+    member do
+      patch :publish
+      get :assign
+      post :assign_users
+    end
     resources :enrollments, only: [:create, :update]
     resources :assignments, only: [:index, :show] do
       resources :submissions, only: [:create]

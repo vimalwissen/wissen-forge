@@ -1,43 +1,129 @@
-<div class="px-4 sm:px-6 lg:px-8">
-  <div class="sm:flex sm:items-center">
-    <div class="sm:flex-auto">
-      <h1 class="text-xl font-semibold text-gray-900">Team Learning Report</h1>
-      <p class="mt-2 text-sm text-gray-700">A list of your reportees and their training progress.</p>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-indigo-600 to-purple-600 pb-32">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-white">Reports & Analytics</h1>
+      <p class="mt-2 text-indigo-100">Track learning progress and compliance across your organization</p>
     </div>
   </div>
-  <div class="mt-8 flex flex-col">
-    <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-          <table class="min-w-full divide-y divide-gray-300">
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 pb-12">
+    <!-- Report Type Tabs -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+      <div class="border-b border-gray-200">
+        <nav class="flex -mb-px">
+          <%= link_to reports_path(type: "team"), class: "px-6 py-4 text-sm font-medium #{@report_type == 'team' ? 'border-b-2 border-indigo-500 text-indigo-600' : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+            <span class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              Team Report
+            </span>
+          <% end %>
+          
+          <% if current_user.admin? || current_user.super_admin? %>
+            <%= link_to reports_path(type: "department"), class: "px-6 py-4 text-sm font-medium #{@report_type == 'department' ? 'border-b-2 border-indigo-500 text-indigo-600' : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+              <span class="flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                Department Report
+              </span>
+            <% end %>
+            
+            <%= link_to reports_path(type: "mandatory"), class: "px-6 py-4 text-sm font-medium #{@report_type == 'mandatory' ? 'border-b-2 border-indigo-500 text-indigo-600' : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+              <span class="flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                Mandatory Compliance
+              </span>
+            <% end %>
+          <% end %>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Team Report -->
+    <% if @report_type == "team" %>
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-bold text-gray-900">Team Learning Progress</h2>
+          <p class="text-sm text-gray-500">Track your team's training completion and mandatory compliance</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Designation</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Total Enrolled</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Completed</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Mandatory Pending</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total / Completed</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skills Acquired</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mandatory Status</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 bg-white">
+            <tbody class="bg-white divide-y divide-gray-200">
               <% @completion_stats.each do |stat| %>
-                <tr>
-                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= stat[:user].name %></td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= stat[:user].designation %></td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= stat[:total_trainings] %></td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                       <%= stat[:completed] %>
-                     </span>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                        <%= stat[:user].name[0].upcase %>
+                      </div>
+                      <div class="ml-4">
+                        <div class="text-sm font-medium text-indigo-600 hover:text-indigo-900">
+                          <%= link_to stat[:user].name, user_path(stat[:user]) %>
+                        </div>
+                        <div class="text-sm text-gray-500"><%= stat[:user].designation %></div>
+                      </div>
+                    </div>
                   </td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= stat[:user].department || "—" %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-sm font-medium text-gray-900"><%= stat[:completed] %></span>
+                    <span class="text-sm text-gray-500"> / <%= stat[:total_trainings] %></span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <% skills = stat[:user].acquired_skills.take(3) %>
+                    <% if skills.any? %>
+                      <div class="flex flex-wrap gap-1">
+                        <% skills.each do |skill| %>
+                          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-50 text-indigo-700">
+                            <%= skill %>
+                          </span>
+                        <% end %>
+                        <% if stat[:user].acquired_skills.count > 3 %>
+                          <span class="text-xs text-gray-400 self-center">+<%= stat[:user].acquired_skills.count - 3 %></span>
+                        <% end %>
+                      </div>
+                    <% else %>
+                      <span class="text-xs text-gray-400">None</span>
+                    <% end %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
                     <% if stat[:mandatory_pending] > 0 %>
                       <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                        <%= stat[:mandatory_pending] %>
+                        <%= stat[:mandatory_pending] %> pending
+                      </span>
+                    <% elsif stat[:mandatory_total] > 0 %>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        ✓ Compliant
                       </span>
                     <% else %>
-                      <span class="text-green-600">All Done</span>
+                      <span class="text-gray-400 text-sm">No mandatory</span>
                     <% end %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <% progress = stat[:total_trainings] > 0 ? (stat[:completed].to_f / stat[:total_trainings] * 100).round : 0 %>
+                    <div class="flex items-center">
+                      <div class="w-24 bg-gray-200 rounded-full h-2 mr-2">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: <%= progress %>%"></div>
+                      </div>
+                      <span class="text-xs text-gray-500"><%= progress %>%</span>
+                    </div>
                   </td>
                 </tr>
               <% end %>
@@ -45,6 +131,111 @@
           </table>
         </div>
       </div>
-    </div>
+    <% end %>
+
+    <!-- Department Report -->
+    <% if @report_type == "department" %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% @department_stats.each do |stat| %>
+          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-gray-900"><%= stat[:department] %></h3>
+              <span class="text-sm text-gray-500"><%= stat[:total_employees] %> employees</span>
+            </div>
+            
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-600">Overall Completion</span>
+                  <span class="font-medium text-gray-900"><%= stat[:completion_rate] %>%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-indigo-600 h-2 rounded-full" style="width: <%= stat[:completion_rate] %>%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-600">Mandatory Compliance</span>
+                  <span class="font-medium <%= stat[:mandatory_compliance] == 100 ? 'text-green-600' : 'text-red-600' %>"><%= stat[:mandatory_compliance] %>%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="<%= stat[:mandatory_compliance] == 100 ? 'bg-green-500' : 'bg-red-500' %> h-2 rounded-full" style="width: <%= stat[:mandatory_compliance] %>%"></div>
+                </div>
+              </div>
+              
+              <div class="pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-center">
+                <div>
+                  <p class="text-2xl font-bold text-indigo-600"><%= stat[:total_enrollments] %></p>
+                  <p class="text-xs text-gray-500">Total Enrollments</p>
+                </div>
+                <div>
+                  <p class="text-2xl font-bold text-green-600"><%= stat[:completed] %></p>
+                  <p class="text-xs text-gray-500">Completed</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Mandatory Report -->
+    <% if @report_type == "mandatory" %>
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-bold text-gray-900">Mandatory Training Compliance</h2>
+          <p class="text-sm text-gray-500">Track completion rates for all mandatory trainings</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Training</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completed</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pending</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completion Rate</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @training_stats.each do |stat| %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4">
+                    <div class="text-sm font-medium text-gray-900"><%= stat[:training].title %></div>
+                    <div class="text-sm text-gray-500"><%= stat[:training].start_time.strftime("%b %d, %Y") %></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <%= stat[:total_assigned] %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <%= stat[:completed] %>
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <% if stat[:pending] > 0 %>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        <%= stat[:pending] %>
+                      </span>
+                    <% else %>
+                      <span class="text-green-600">0</span>
+                    <% end %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-24 bg-gray-200 rounded-full h-2 mr-2">
+                        <div class="<%= stat[:completion_rate] == 100 ? 'bg-green-500' : 'bg-indigo-600' %> h-2 rounded-full" style="width: <%= stat[:completion_rate] %>%"></div>
+                      </div>
+                      <span class="text-sm font-medium <%= stat[:completion_rate] == 100 ? 'text-green-600' : 'text-gray-900' %>"><%= stat[:completion_rate] %>%</span>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

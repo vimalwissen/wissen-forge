@@ -1,83 +1,172 @@
-<div class="bg-white shadow overflow-hidden sm:rounded-lg">
-  <div class="px-4 py-5 sm:px-6">
-    <h3 class="text-lg leading-6 font-medium text-gray-900">My Profile</h3>
-    <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and learning history.</p>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+  <!-- Profile Header -->
+  <div class="bg-gradient-to-r from-indigo-600 to-purple-600 pb-32">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center space-x-6">
+        <div class="h-24 w-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white text-3xl font-bold">
+          <%= @user.name.split.first[0] %><%= @user.name.split.last&.[](0) || "" %>
+        </div>
+        <div>
+          <h1 class="text-3xl font-bold text-white"><%= @user.name %></h1>
+          <p class="mt-1 text-indigo-100"><%= @user.designation %> · <%= @user.department %></p>
+          <p class="mt-1 text-indigo-200 text-sm"><%= @user.email %></p>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="border-t border-gray-200">
-    <dl>
-      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Full name</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.name %></dd>
+
+  <!-- Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 pb-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Stats Cards -->
+      <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-indigo-100 rounded-xl p-3">
+              <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <div class="ml-5">
+              <p class="text-sm font-medium text-gray-500">Total Trainings</p>
+              <p class="text-2xl font-bold text-gray-900"><%= @enrollments.count %></p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-green-100 rounded-xl p-3">
+              <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="ml-5">
+              <p class="text-sm font-medium text-gray-500">Completed</p>
+              <p class="text-2xl font-bold text-gray-900"><%= @enrollments.completed.count %></p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-yellow-100 rounded-xl p-3">
+              <svg class="h-6 w-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
+            </div>
+            <div class="ml-5">
+              <p class="text-sm font-medium text-gray-500">Badges Earned</p>
+              <p class="text-2xl font-bold text-gray-900"><%= @badges.count %></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-purple-100 rounded-xl p-3">
+              <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <div class="ml-5">
+              <p class="text-sm font-medium text-gray-500">Skills Acquired</p>
+              <p class="text-2xl font-bold text-gray-900"><%= @user.acquired_skills.count %></p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Designation</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.designation %></dd>
+      
+      <!-- Skills Section -->
+      <div class="lg:col-span-3">
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4">Tech Stack & Skills</h2>
+          <% skills = @user.acquired_skills %>
+          <% if skills.any? %>
+            <div class="flex flex-wrap gap-2">
+              <% skills.each do |skill| %>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                  <%= skill %>
+                </span>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-gray-500 text-sm">No skills acquired yet. Complete trainings to build your profile!</p>
+          <% end %>
+        </div>
       </div>
-      <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Department</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @user.department %></dd>
-      </div>
-       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Badges</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+      
+      <!-- Badges Section -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4"><%= @user == current_user ? 'My' : "#{@user.name.split.first}'s" %> Badges</h2>
           <% if @badges.any? %>
-            <div class="flex space-x-2">
+            <div class="space-y-4">
               <% @badges.each do |badge| %>
-                <%= link_to certificate_path(badge.id), target: "_blank", class: "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 hover:bg-yellow-200" do %>
-                   🏅 <%= badge.name %>
+                <%= link_to certificate_path(badge.id), target: "_blank", class: "block p-4 rounded-xl bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 hover:shadow-md transition-all duration-200" do %>
+                  <div class="flex items-center">
+                    <div class="text-3xl mr-3">🏅</div>
+                    <div>
+                      <p class="font-bold text-gray-900"><%= badge.name %></p>
+                      <p class="text-xs text-gray-500"><%= badge.level.humanize %> Level</p>
+                    </div>
+                  </div>
                 <% end %>
               <% end %>
             </div>
           <% else %>
-            <span class="text-gray-500">No badges earned yet.</span>
+            <div class="text-center py-8">
+              <div class="text-5xl mb-4">🎯</div>
+              <p class="text-gray-500">Complete more trainings to earn badges!</p>
+            </div>
           <% end %>
-        </dd>
+        </div>
       </div>
-    </dl>
-  </div>
-</div>
 
-<div class="mt-8">
-  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Training History</h3>
-  <div class="flex flex-col">
-    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Training</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completion Date</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+      <!-- Training History -->
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-bold text-gray-900"><%= @user == current_user ? 'Training History' : "#{@user.name.split.first}'s Training History" %></h2>
+          </div>
+          <div class="divide-y divide-gray-200">
+            <% if @enrollments.any? %>
               <% @enrollments.each do |enrollment| %>
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    <%= enrollment.training.title %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      <%= case enrollment.status
-                          when 'completed' then 'bg-green-100 text-green-800'
-                          when 'enrolled' then 'bg-blue-100 text-blue-800'
-                          else 'bg-gray-100 text-gray-800'
-                          end %>">
-                      <%= enrollment.status.humanize %>
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <%= enrollment.completion_date&.to_date %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <%= enrollment.score %>
-                  </td>
-                </tr>
+                <div class="p-6 hover:bg-gray-50 transition-colors duration-200">
+                  <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                      <h3 class="text-sm font-semibold text-gray-900"><%= enrollment.training.title %></h3>
+                      <p class="text-xs text-gray-500 mt-1"><%= enrollment.training.instructor %></p>
+                    </div>
+                    <div class="ml-4 flex items-center space-x-4">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold 
+                        <%= case enrollment.status
+                            when 'completed' then 'bg-green-100 text-green-800'
+                            when 'enrolled' then 'bg-blue-100 text-blue-800'
+                            when 'waitlisted' then 'bg-yellow-100 text-yellow-800'
+                            else 'bg-gray-100 text-gray-800'
+                            end %>">
+                        <%= enrollment.status.humanize %>
+                      </span>
+                      <% if enrollment.score %>
+                        <span class="text-sm font-bold text-indigo-600"><%= enrollment.score %>%</span>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
               <% end %>
-            </tbody>
-          </table>
+            <% else %>
+              <div class="p-12 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No training history</h3>
+                <p class="mt-1 text-sm text-gray-500">Start learning by enrolling in a course!</p>
+                <%= link_to "Browse Catalog", trainings_path, class: "mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" %>
+              </div>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>

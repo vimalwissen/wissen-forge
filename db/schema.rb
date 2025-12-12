@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_12_061241) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_12_144000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,6 +66,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_12_061241) do
   end
 
   create_table "trainings", force: :cascade do |t|
+    t.integer "assignment_scope", default: 0
     t.integer "capacity"
     t.datetime "created_at", null: false
     t.string "department_target"
@@ -73,8 +74,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_12_061241) do
     t.datetime "end_time"
     t.string "instructor"
     t.integer "mode"
+    t.string "skills", default: [], array: true
     t.datetime "start_time"
     t.integer "status"
+    t.string "target_departments", default: [], array: true
+    t.integer "target_user_ids", default: [], array: true
     t.string "title"
     t.integer "training_type"
     t.datetime "updated_at", null: false

@@ -10,6 +10,7 @@ class Enrollment < ApplicationRecord
   private
 
   def check_capacity
+    return unless training
     return unless training.classroom?
     if training.enrollments.count >= training.capacity
       self.status = :waitlisted

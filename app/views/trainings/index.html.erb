@@ -1,36 +1,219 @@
-<div class="bg-white shadow overflow-hidden sm:rounded-lg">
-  <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
-    <h3 class="text-lg leading-6 font-medium text-gray-900">Training Catalog</h3>
-    <% if policy(Training).create? %>
-      <%= link_to "New Training", new_training_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" %>
-    <% end %>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+  <!-- Header Section -->
+  <div class="bg-gradient-to-r from-indigo-600 to-purple-600 pb-32">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-3xl font-bold text-white">Training Catalog</h1>
+          <p class="mt-2 text-indigo-100">Explore our courses and level up your skills</p>
+        </div>
+        <div class="mt-4 flex md:mt-0 md:ml-4">
+          <% if policy(Training).create? %>
+            <%= link_to new_training_path, class: "inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none transition-all duration-200" do %>
+              <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+              </svg>
+              New Training
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
-  <ul role="list" class="divide-y divide-gray-200">
-    <% @trainings.each do |training| %>
-      <li class="px-4 py-4 sm:px-6">
-        <div class="flex items-center justify-between">
-          <div class="text-sm font-medium text-indigo-600 truncate">
-            <%= link_to training.title, training %>
-          </div>
-          <div class="ml-2 flex-shrink-0 flex">
-            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= training.mandatory? ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
-              <%= training.mode.humanize %>
-            </span>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 pb-12 relative z-10">
+    
+    <!-- Pending Trainings Section (Super Admin Only) -->
+    <% pending_trainings = @trainings.select { |t| t.status == "pending_approval" } %>
+    <% if pending_trainings.any? && current_user.super_admin? %>
+      <div class="mb-8">
+        <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+          <span class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full mr-2"><%= pending_trainings.count %></span>
+          Pending Approval
+        </h2>
+        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl overflow-hidden shadow-lg">
+          <div class="divide-y divide-yellow-200">
+            <% pending_trainings.each do |training| %>
+              <div class="p-6 flex items-center justify-between hover:bg-yellow-100 transition-colors duration-200">
+                <div class="flex-1">
+                  <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-200 text-yellow-800">
+                      Pending
+                    </span>
+                    <h3 class="text-lg font-bold text-gray-900"><%= training.title %></h3>
+                  </div>
+                  <p class="mt-1 text-sm text-gray-600"><%= training.description.truncate(100) %></p>
+                  <div class="mt-2 flex items-center gap-4 text-sm text-gray-500">
+                    <span><%= training.training_type.humanize %></span>
+                    <span>•</span>
+                    <span><%= training.mode.humanize %></span>
+                    <span>•</span>
+                    <span><%= training.start_time.strftime("%b %d, %Y") %></span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 ml-4">
+                  <%= link_to training, class: "inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-all duration-200" do %>
+                    View
+                  <% end %>
+                  <% if policy(training).publish? %>
+                    <%= button_to "Approve & Publish", publish_training_path(training), method: :patch, class: "inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-green-600 hover:bg-green-700 transition-all duration-200" %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
           </div>
         </div>
-        <div class="mt-2 sm:flex sm:justify-between">
-          <div class="sm:flex">
-            <p class="flex items-center text-sm text-gray-500">
-              <%= training.description.truncate(100) %>
-            </p>
-          </div>
-          <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-            <p>
-              <%= training.start_time.to_date.to_fs(:long) %>
-            </p>
-          </div>
-        </div>
-      </li>
+      </div>
     <% end %>
-  </ul>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Filters Sidebar -->
+      <div class="w-full lg:w-1/4 space-y-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-gray-900">Filters</h2>
+            <% if params[:skill].present? || params[:training_type].present? || params[:mode].present? %>
+              <%= link_to "Clear All", trainings_path, class: "text-sm text-indigo-600 hover:text-indigo-800 font-medium" %>
+            <% end %>
+          </div>
+          
+          <%= form_with url: trainings_path, method: :get, local: true, id: "filter_form" do |form| %>
+            <!-- Tech Stack / Skills -->
+            <div class="mb-6">
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Tech Stack</h3>
+              <div class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
+                <% # Fetch distinct skills from all trainings (could be optimized with a dedicated Skills table or caching) %>
+                <% all_skills = Training.pluck(:skills).flatten.compact.uniq.sort %>
+                <% all_skills.each do |skill| %>
+                  <label class="flex items-center group cursor-pointer">
+                    <%= radio_button_tag :skill, skill, params[:skill] == skill, class: "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300", onchange: "this.form.submit()" %>
+                    <span class="ml-2 text-sm text-gray-700 group-hover:text-indigo-600 transition-colors"><%= skill %></span>
+                  </label>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-100 my-4"></div>
+
+            <!-- Training Type -->
+            <div class="mb-6">
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Type</h3>
+              <div class="space-y-2">
+                <% Training.training_types.keys.each do |type| %>
+                  <label class="flex items-center group cursor-pointer">
+                    <%= radio_button_tag :training_type, type, params[:training_type] == type, class: "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300", onchange: "this.form.submit()" %>
+                    <span class="ml-2 text-sm text-gray-700 group-hover:text-indigo-600 transition-colors"><%= type.humanize %></span>
+                  </label>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-100 my-4"></div>
+
+            <!-- Mode (Mandatory/Optional) -->
+            <div class="mb-6">
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Mode</h3>
+              <div class="space-y-2">
+                <% Training.modes.keys.each do |mode| %>
+                  <label class="flex items-center group cursor-pointer">
+                    <%= radio_button_tag :mode, mode, params[:mode] == mode, class: "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300", onchange: "this.form.submit()" %>
+                    <span class="ml-2 text-sm text-gray-700 group-hover:text-indigo-600 transition-colors"><%= mode.humanize %></span>
+                  </label>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="w-full lg:w-3/4">
+        <!-- Published Trainings Cards Grid -->
+        <% published_trainings = @trainings.reject { |t| t.status == "pending_approval" } %>
+        
+        <% if published_trainings.any? %>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-gray-900">
+              <%= published_trainings.count %> <%= "Result".pluralize(published_trainings.count) %>
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <% published_trainings.each do |training| %>
+              <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group flex flex-col h-full">
+                <!-- Card Header with Gradient -->
+                <div class="h-32 bg-gradient-to-r <%= training.mandatory? ? 'from-red-500 to-pink-500' : 'from-blue-500 to-indigo-600' %> relative flex-shrink-0">
+                  <div class="absolute inset-0 bg-black/10"></div>
+                  <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/90 backdrop-blur-sm text-gray-800">
+                      <%= training.training_type.humanize %>
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold <%= training.mandatory? ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
+                      <%= training.mode.humanize %>
+                    </span>
+                  </div>
+                </div>
+                
+                <!-- Card Body -->
+                <div class="p-6 flex flex-col flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-200 truncate" title="<%= training.title %>">
+                    <%= training.title %>
+                  </h3>
+                  
+                  <div class="mt-2 flex flex-wrap gap-1">
+                    <% training.skills.take(3).each do |skill| %>
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                        <%= skill %>
+                      </span>
+                    <% end %>
+                    <% if training.skills.size > 3 %>
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                        +<%= training.skills.size - 3 %>
+                      </span>
+                    <% end %>
+                  </div>
+
+                  <p class="mt-2 text-sm text-gray-500 line-clamp-2 flex-1"><%= training.description %></p>
+                  
+                  <div class="mt-4 flex items-center text-sm text-gray-500">
+                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                    </svg>
+                    <%= training.start_time.strftime("%b %d, %Y") %>
+                  </div>
+                  
+                  <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                    </svg>
+                    <% if training.classroom? %>
+                      <%= training.enrollments.count %>/<%= training.capacity %> enrolled
+                    <% else %>
+                      Online - Unlimited
+                    <% end %>
+                  </div>
+                  
+                  <%= link_to training, class: "mt-6 w-full flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none transition-all duration-200 shadow-md hover:shadow-lg" do %>
+                    View Details
+                    <svg class="ml-2 -mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% elsif pending_trainings.empty? %>
+          <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
+            <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <h3 class="mt-4 text-lg font-medium text-gray-900">No trainings available matching your filters</h3>
+            <p class="mt-2 text-sm text-gray-500">Try adjusting your filters or check back later.</p>
+            <%= link_to "Clear Filters", trainings_path, class: "mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>

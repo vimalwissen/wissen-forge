@@ -1,72 +1,232 @@
-<div class="bg-white shadow overflow-hidden sm:rounded-lg">
-  <div class="px-4 py-5 sm:px-6 flex justify-between">
-    <div>
-      <h3 class="text-lg leading-6 font-medium text-gray-900"><%= @training.title %></h3>
-      <p class="mt-1 max-w-2xl text-sm text-gray-500"><%= @training.description %></p>
-    </div>
-    <div class="flex space-x-3">
-      <% if policy(@training).edit? %>
-        <%= link_to "Edit", edit_training_path(@training), class: "text-indigo-600 hover:text-indigo-900" %>
-      <% end %>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+  <!-- Hero Header -->
+  <div class="bg-gradient-to-r <%= @training.mandatory? ? 'from-red-500 to-pink-500' : 'from-indigo-600 to-purple-600' %> pb-32">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <nav class="flex mb-8" aria-label="Breadcrumb">
+        <ol role="list" class="flex items-center space-x-4">
+          <li>
+            <%= link_to trainings_path, class: "text-white/70 hover:text-white transition-colors duration-200" do %>
+              ← Back to Catalog
+            <% end %>
+          </li>
+        </ol>
+      </nav>
+      
+      <div class="md:flex md:items-start md:justify-between">
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-white/20 backdrop-blur-sm text-white">
+              <%= @training.training_type.humanize %>
+            </span>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold <%= @training.mandatory? ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
+              <%= @training.mode.humanize %>
+            </span>
+          </div>
+          <h1 class="text-4xl font-bold text-white"><%= @training.title %></h1>
+          <p class="mt-4 text-xl text-white/80 max-w-3xl"><%= @training.description %></p>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-    <dl class="sm:divide-y sm:divide-gray-200">
-      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Instructor</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"><%= @training.instructor %></dd>
-      </div>
-      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Schedule</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @training.start_time.strftime("%B %d, %Y %I:%M %p") %> - <%= @training.end_time.strftime("%I:%M %p") %>
-        </dd>
-      </div>
-      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Type & Mode</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @training.training_type.humanize %> / <%= @training.mode.humanize %>
-        </dd>
-      </div>
-      <% if @training.classroom? %>
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">Capacity</dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= @training.enrollments.count %> / <%= @training.capacity %>
-          </dd>
-        </div>
-      <% end %>
+
+  <!-- Content Area -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 pb-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
-      <!-- Enrollment Status / Action -->
-      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">My Status</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">About This Training</h2>
+          
+          <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+            <div class="sm:col-span-1">
+              <dt class="text-sm font-medium text-gray-500 flex items-center gap-2">
+                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                </svg>
+                Instructor
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 font-medium"><%= @training.instructor %></dd>
+            </div>
+            
+            <div class="sm:col-span-1">
+              <dt class="text-sm font-medium text-gray-500 flex items-center gap-2">
+                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                </svg>
+                Date
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 font-medium"><%= @training.start_time.strftime("%B %d, %Y") %></dd>
+            </div>
+            
+            <div class="sm:col-span-1">
+              <dt class="text-sm font-medium text-gray-500 flex items-center gap-2">
+                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                </svg>
+                Time
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 font-medium"><%= @training.start_time.strftime("%I:%M %p") %> - <%= @training.end_time.strftime("%I:%M %p") %></dd>
+            </div>
+            
+            <% if @training.classroom? %>
+              <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500 flex items-center gap-2">
+                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                  </svg>
+                  Capacity
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900 font-medium">
+                  <%= @training.enrollments.count %> / <%= @training.capacity %> seats filled
+                  <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-indigo-600 h-2 rounded-full" style="width: <%= (@training.enrollments.count.to_f / @training.capacity * 100).round %>%"></div>
+                  </div>
+                </dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+        
+        <!-- Training Content Section -->
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            Training Content
+          </h2>
+          
+          <!-- Course Modules -->
+          <div class="space-y-4">
+            <div class="border border-gray-200 rounded-xl overflow-hidden">
+              <div class="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="flex-shrink-0 w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                  <h3 class="font-semibold text-gray-900">Introduction & Overview</h3>
+                </div>
+                <span class="text-xs text-gray-500">30 min</span>
+              </div>
+              <div class="px-4 py-3 bg-white">
+                <p class="text-sm text-gray-600">Get started with the fundamentals and learn what this training covers.</p>
+              </div>
+            </div>
+            
+            <div class="border border-gray-200 rounded-xl overflow-hidden">
+              <div class="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="flex-shrink-0 w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                  <h3 class="font-semibold text-gray-900">Core Concepts</h3>
+                </div>
+                <span class="text-xs text-gray-500">45 min</span>
+              </div>
+              <div class="px-4 py-3 bg-white">
+                <p class="text-sm text-gray-600">Deep dive into the main topics and practical applications.</p>
+              </div>
+            </div>
+            
+            <div class="border border-gray-200 rounded-xl overflow-hidden">
+              <div class="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="flex-shrink-0 w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                  <h3 class="font-semibold text-gray-900">Hands-on Practice</h3>
+                </div>
+                <span class="text-xs text-gray-500">60 min</span>
+              </div>
+              <div class="px-4 py-3 bg-white">
+                <p class="text-sm text-gray-600">Apply what you've learned through exercises and real-world scenarios.</p>
+              </div>
+            </div>
+            
+            <div class="border border-gray-200 rounded-xl overflow-hidden">
+              <div class="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="flex-shrink-0 w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center font-bold text-sm">✓</span>
+                  <h3 class="font-semibold text-gray-900">Assessment & Certification</h3>
+                </div>
+                <span class="text-xs text-gray-500">30 min</span>
+              </div>
+              <div class="px-4 py-3 bg-white">
+                <p class="text-sm text-gray-600">Complete the final assessment to earn your certificate and badge.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Assignments Section -->
+        <% if @training.assignments.any? %>
+          <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              Assignments (<%= @training.assignments.count %>)
+            </h2>
+            <div class="space-y-4">
+              <% @training.assignments.each do |assignment| %>
+                <%= link_to training_assignment_path(@training, assignment), class: "block p-4 border-2 border-gray-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 group" do %>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                      <div class="flex-shrink-0 w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                        <svg class="h-6 w-6 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p class="text-base font-semibold text-gray-900 group-hover:text-indigo-600"><%= assignment.title %></p>
+                        <p class="text-sm text-gray-500"><%= assignment.description&.truncate(60) || "No description" %></p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-sm font-medium <%= assignment.due_date < Time.current ? 'text-red-600' : 'text-gray-600' %>">
+                        Due: <%= assignment.due_date.strftime("%b %d, %Y") %>
+                      </p>
+                      <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600 ml-auto mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                      </svg>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      
+      <!-- Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Enrollment Status</h3>
+          
           <% if @enrollment %>
-            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
-              <%= @enrollment.status.humanize %>
-            </span>
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+              <div class="flex items-center">
+                <svg class="h-6 w-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-green-800 font-medium"><%= @enrollment.status.humanize %></span>
+              </div>
+            </div>
           <% else %>
-            <%= button_to "Enroll Now", training_enrollments_path(@training), method: :post, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none" %>
+            <%= button_to "Enroll Now", training_enrollments_path(@training), method: :post, class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5" %>
           <% end %>
-        </dd>
+          
+          <% if policy(@training).edit? %>
+            <div class="mt-4 border-t border-gray-200 pt-4">
+              <h4 class="text-sm font-semibold text-gray-500 mb-3">Admin Actions</h4>
+              <div class="space-y-2">
+                <%= link_to assign_training_path(@training), class: "w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 focus:outline-none transition-all duration-200" do %>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                  </svg>
+                  Assign Users
+                <% end %>
+                <%= link_to "Edit Training", edit_training_path(@training), class: "w-full flex justify-center py-2 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-all duration-200" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
-
-       <!-- Assignments Section -->
-      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Assignments</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-           <% if @training.assignments.any? %>
-             <ul class="list-disc pl-5 space-y-1">
-               <% @training.assignments.each do |assignment| %>
-                 <li><%= link_to assignment.title, training_assignment_path(@training, assignment), class: "text-indigo-600 hover:underline" %> (Due: <%= assignment.due_date.to_date %>)</li>
-               <% end %>
-             </ul>
-           <% else %>
-             No assignments.
-           <% end %>
-        </dd>
-      </div>
-
-    </dl>
+    </div>
   </div>
 </div>

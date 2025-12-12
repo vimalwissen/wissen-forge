@@ -59,3 +59,42 @@ Employee Flow: Login -> See Dashboard -> Enroll in open training -> Check 'My Tr
 Attendance: Admin marks attendance -> Employee sees completion in Profile.
 Quizzes & Assignments: Employee submits assignment/takes quiz -> Admin grades -> Score updates.
 Badges: Employee hits 25 hours -> System auto-awards Silver Badge -> Certificate generated.
+
+
+🔐 Super Admin: superadmin@wissen.com / password
+   → Can approve mandatory trainings, view all reports
+
+👤 Admin: admin@wissen.com / password
+   → Can create trainings, view all reports
+
+👔 Engineering Manager: rajesh@wissen.com / password
+   → Has 3 reportees, earned ALL badges (Platinum!)
+
+👔 Design Manager: sneha@wissen.com / password
+   → Has 2 reportees, earned Gold badge
+
+👔 Sales Manager: amit@wissen.com / password
+   → Has 2 reportees, earned Gold badge
+
+👨‍💻 Senior Dev: alice@wissen.com / password
+   → Earned Gold badge, multiple completed trainings
+
+👨‍💻 Developer: bob@wissen.com / password
+   → Earned Gold badge
+
+👩‍🎨 Designer: david@wissen.com / password
+   → Earned Silver badge
+
+💼 Sales: grace@wissen.com / password
+   → Has pending mandatory training (Security)
+
+============================================================
+                    KEY DATA POINTS
+============================================================
+
+📊 Total Users: 12
+📚 Total Trainings: 10 (9 published, 1 pending)
+📝 Total Enrollments: 34 (25 completed)
+🏅 Total Badges Awarded: 16
+📋 Total Assignments: 3
+📤 Total Submissions: 3
