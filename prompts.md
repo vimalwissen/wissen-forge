@@ -55,3 +55,6 @@ You are a code coverage expert and you can complete the test coverage of big big
 ------
 
 Put filter on training page with tech stack, skill and training type
+
+-----
+We had to add the content also in the courses and assignment and mark as complete for each section. Also add the data in seed.rb file. the content can be just static or visual youtube embedding

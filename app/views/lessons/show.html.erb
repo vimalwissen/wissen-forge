@@ -1,0 +1,154 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+  <!-- Header -->
+  <div class="bg-gradient-to-r <%= @training.mandatory? ? 'from-red-500 to-pink-500' : 'from-indigo-600 to-purple-600' %> pb-16">
+    <div class="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <nav class="flex mb-6" aria-label="Breadcrumb">
+        <ol role="list" class="flex items-center space-x-4">
+          <li>
+            <%= link_to trainings_path, class: "text-white/70 hover:text-white transition-colors duration-200" do %>
+              Trainings
+            <% end %>
+          </li>
+          <li class="text-white/50">/</li>
+          <li>
+            <%= link_to @training.title, training_path(@training), class: "text-white/70 hover:text-white transition-colors duration-200" %>
+          </li>
+          <li class="text-white/50">/</li>
+          <li class="text-white font-medium"><%= @lesson.title %></li>
+        </ol>
+      </nav>
+      
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-sm text-white">
+              Lesson <%= @lesson.position + 1 %>
+            </span>
+            <% if @progress&.completed? %>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+                Completed
+              </span>
+            <% end %>
+          </div>
+          <h1 class="text-3xl font-bold text-white"><%= @lesson.title %></h1>
+          <% if @lesson.duration_minutes.present? && @lesson.duration_minutes > 0 %>
+            <p class="mt-2 text-white/70">
+              <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <%= @lesson.duration_minutes %> minutes
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 pb-12">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      
+      <!-- Video Section -->
+      <% if @lesson.video_url.present? %>
+        <div class="aspect-video bg-gray-900">
+          <iframe 
+            class="w-full h-full"
+            src="<%= @lesson.youtube_embed_url %>"
+            title="<%= @lesson.title %>"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+        </div>
+      <% end %>
+
+      <!-- Content Section -->
+      <div class="p-8">
+        <% if @lesson.description.present? %>
+          <div class="prose prose-indigo max-w-none mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Overview</h2>
+            <p class="text-gray-600"><%= @lesson.description %></p>
+          </div>
+        <% end %>
+
+        <% if @lesson.content.present? %>
+          <div class="prose prose-indigo max-w-none mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Lesson Content</h2>
+            <div class="bg-gray-50 rounded-xl p-6 text-gray-700">
+              <%= simple_format(@lesson.content) %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Mark as Complete -->
+        <div class="border-t border-gray-200 pt-6">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <% if @previous_lesson %>
+                <%= link_to training_lesson_path(@training, @previous_lesson), class: "inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-all" do %>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                  </svg>
+                  Previous
+                <% end %>
+              <% end %>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <% if @progress&.completed? %>
+                <div class="flex items-center gap-2 text-green-600 font-medium">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  Completed!
+                </div>
+              <% else %>
+                <%= button_to complete_training_lesson_path(@training, @lesson), method: :post, class: "inline-flex items-center gap-2 px-6 py-3 border border-transparent rounded-xl text-sm font-bold text-white bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5" do %>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  Mark as Complete
+                <% end %>
+              <% end %>
+
+              <% if @next_lesson %>
+                <%= link_to training_lesson_path(@training, @next_lesson), class: "inline-flex items-center gap-2 px-4 py-2 border border-transparent rounded-xl text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all" do %>
+                  Next Lesson
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson Progress Sidebar -->
+    <div class="mt-8 bg-white rounded-2xl shadow-lg p-6">
+      <h3 class="text-lg font-bold text-gray-900 mb-4">Course Progress</h3>
+      <div class="space-y-2">
+        <% @training.lessons.each_with_index do |lesson, index| %>
+          <% completed = lesson.completed_by?(current_user) %>
+          <%= link_to training_lesson_path(@training, lesson), class: "flex items-center gap-3 p-3 rounded-lg transition-all #{lesson.id == @lesson.id ? 'bg-indigo-50 border-2 border-indigo-300' : 'hover:bg-gray-50 border-2 border-transparent'}" do %>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold <%= completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600' %>">
+              <% if completed %>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+              <% else %>
+                <%= index + 1 %>
+              <% end %>
+            </span>
+            <span class="text-sm font-medium <%= completed ? 'text-green-700' : 'text-gray-700' %> truncate"><%= lesson.title %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

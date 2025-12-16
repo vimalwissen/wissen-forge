@@ -18,6 +18,11 @@ Rails.application.routes.draw do
     resources :assignments, only: [:index, :show] do
       resources :submissions, only: [:create]
     end
+    resources :lessons, only: [:show] do
+      member do
+        post :complete
+      end
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_12_144000) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_12_150001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,6 +44,31 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_12_144000) do
     t.bigint "user_id", null: false
     t.index ["training_id"], name: "index_enrollments_on_training_id"
     t.index ["user_id"], name: "index_enrollments_on_user_id"
+  end
+
+  create_table "lesson_progresses", force: :cascade do |t|
+    t.boolean "completed", default: false
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.bigint "lesson_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["lesson_id"], name: "index_lesson_progresses_on_lesson_id"
+    t.index ["user_id", "lesson_id"], name: "index_lesson_progresses_on_user_id_and_lesson_id", unique: true
+    t.index ["user_id"], name: "index_lesson_progresses_on_user_id"
+  end
+
+  create_table "lessons", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.integer "duration_minutes", default: 0
+    t.integer "position", default: 0
+    t.string "title", null: false
+    t.bigint "training_id", null: false
+    t.datetime "updated_at", null: false
+    t.string "video_url"
+    t.index ["training_id"], name: "index_lessons_on_training_id"
   end
 
   create_table "quizzes", force: :cascade do |t|
@@ -114,6 +139,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_12_144000) do
   add_foreign_key "assignments", "trainings"
   add_foreign_key "enrollments", "trainings"
   add_foreign_key "enrollments", "users"
+  add_foreign_key "lesson_progresses", "lessons"
+  add_foreign_key "lesson_progresses", "users"
+  add_foreign_key "lessons", "trainings"
   add_foreign_key "quizzes", "trainings"
   add_foreign_key "submissions", "assignments"
   add_foreign_key "submissions", "users"

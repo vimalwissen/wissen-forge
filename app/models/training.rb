@@ -8,6 +8,7 @@ class Training < ApplicationRecord
   has_many :users, through: :enrollments
   has_one :quiz, dependent: :destroy
   has_many :assignments, dependent: :destroy
+  has_many :lessons, -> { order(:position) }, dependent: :destroy
 
   validates :title, presence: true
   validates :start_time, presence: true

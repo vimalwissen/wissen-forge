@@ -3,6 +3,8 @@
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
 puts "🧹 Cleaning up database..."
+LessonProgress.destroy_all
+Lesson.destroy_all
 UserBadge.destroy_all
 Submission.destroy_all
 Assignment.destroy_all
@@ -421,6 +423,142 @@ Submission.create!(user: alice, assignment: aws_assignment, file_url: "https://d
 Submission.create!(user: bob, assignment: aws_assignment, file_url: "https://drive.google.com/bob-aws-diagram", grade: 88)
 Submission.create!(user: eng_manager, assignment: aws_assignment, file_url: "https://drive.google.com/rajesh-aws-diagram", grade: 92)
 
+puts "📺 Creating Lessons with Video Content..."
+
+# Lessons for Rails Advanced Training
+Lesson.create!(
+  training: t_rails_advanced,
+  title: "Introduction to Rails 8",
+  description: "Get started with Rails 8 and understand all the new features and improvements.",
+  content: "Rails 8 brings exciting new features including Hotwire as the default frontend framework, improved deployment with Kamal, and enhanced developer experience. In this lesson, we'll explore what's new and why it matters for your applications.\n\nKey topics:\n- New default stack\n- Deployment improvements\n- Performance enhancements\n- Breaking changes to be aware of",
+  video_url: "https://www.youtube.com/watch?v=2OhwkX0jTHM",
+  position: 0,
+  duration_minutes: 30
+)
+
+Lesson.create!(
+  training: t_rails_advanced,
+  title: "Turbo Frames Deep Dive",
+  description: "Master Turbo Frames for building dynamic, SPA-like interfaces without writing custom JavaScript.",
+  content: "Turbo Frames allow you to decompose pages into independent contexts, which can be lazily loaded and scoped for navigation.\n\nIn this lesson you'll learn:\n- How Turbo Frames work under the hood\n- Lazy loading frames for performance\n- Targeting frames for navigation\n- Advanced patterns like frame morphing",
+  video_url: "https://www.youtube.com/watch?v=4-0HLyiX7L4",
+  position: 1,
+  duration_minutes: 45
+)
+
+Lesson.create!(
+  training: t_rails_advanced,
+  title: "Stimulus Controllers Best Practices",
+  description: "Learn to write clean, reusable Stimulus controllers that enhance your HTML.",
+  content: "Stimulus is designed to augment your HTML with just enough behavior. In this lesson, we'll explore best practices for organizing your controllers.\n\nTopics covered:\n- Controller naming conventions\n- Using values, targets, and outlets\n- Controller communication patterns\n- Testing Stimulus controllers",
+  video_url: "https://www.youtube.com/watch?v=hdMVqL6svvM",
+  position: 2,
+  duration_minutes: 40
+)
+
+Lesson.create!(
+  training: t_rails_advanced,
+  title: "Building Real-Time Features",
+  description: "Implement real-time updates using Turbo Streams and Action Cable.",
+  content: "Real-time features enhance user experience significantly. With Turbo Streams, you can broadcast changes to all connected clients.\n\nWhat you'll build:\n- Live notifications system\n- Real-time chat component\n- Collaborative editing preview\n- Best practices for WebSocket usage",
+  video_url: "https://www.youtube.com/watch?v=7FrH-Y2Y0AY",
+  position: 3,
+  duration_minutes: 50
+)
+
+# Lessons for React Advanced Training
+Lesson.create!(
+  training: t_react_advanced,
+  title: "Advanced React Patterns",
+  description: "Master compound components, render props, and custom hooks.",
+  content: "Take your React skills to the next level with advanced patterns used by industry experts.\n\nPatterns covered:\n- Compound Components\n- Render Props\n- Custom Hooks\n- Higher-Order Components\n- State Machines with XState",
+  video_url: "https://www.youtube.com/watch?v=J-g9ZJha8FE",
+  position: 0,
+  duration_minutes: 60
+)
+
+Lesson.create!(
+  training: t_react_advanced,
+  title: "Redux Toolkit Essentials",
+  description: "Learn the modern way to use Redux with Redux Toolkit.",
+  content: "Redux Toolkit dramatically simplifies Redux usage with sensible defaults and powerful utilities.\n\nYou'll learn:\n- createSlice and createAsyncThunk\n- RTK Query for data fetching\n- Entity adapters for normalized state\n- Best practices for state management",
+  video_url: "https://www.youtube.com/watch?v=9zySeP5vH9c",
+  position: 1,
+  duration_minutes: 55
+)
+
+Lesson.create!(
+  training: t_react_advanced,
+  title: "Performance Optimization",
+  description: "Profile and optimize React applications for maximum performance.",
+  content: "Learn to identify and fix performance bottlenecks in React applications.\n\nTopics:\n- React DevTools Profiler\n- useMemo and useCallback correctly\n- Code splitting with React.lazy\n- Virtual scrolling for large lists\n- Web Vitals optimization",
+  video_url: "https://www.youtube.com/watch?v=0-BsmzlMMIw",
+  position: 2,
+  duration_minutes: 45
+)
+
+# Lessons for AWS Cloud Training
+Lesson.create!(
+  training: t_cloud_aws,
+  title: "AWS Fundamentals",
+  description: "Introduction to AWS cloud computing concepts and core services.",
+  content: "Start your cloud journey with AWS fundamentals.\n\nCore concepts:\n- Regions and Availability Zones\n- IAM and security best practices\n- AWS pricing models\n- AWS Well-Architected Framework",
+  video_url: "https://www.youtube.com/watch?v=JIbIYCM48to",
+  position: 0,
+  duration_minutes: 40
+)
+
+Lesson.create!(
+  training: t_cloud_aws,
+  title: "EC2 and VPC",
+  description: "Deploy and manage virtual servers with EC2 and networking with VPC.",
+  content: "Learn to deploy scalable compute resources.\n\nHands-on:\n- Launching EC2 instances\n- Security groups configuration\n- VPC setup and subnets\n- Load balancing basics",
+  video_url: "https://www.youtube.com/watch?v=iHX-jtKIVNA",
+  position: 1,
+  duration_minutes: 50
+)
+
+Lesson.create!(
+  training: t_cloud_aws,
+  title: "S3 and Storage",
+  description: "Master AWS storage solutions including S3, EBS, and EFS.",
+  content: "Understand AWS storage options for different use cases.\n\nTopics:\n- S3 bucket configuration\n- Storage classes and lifecycle\n- EBS vs EFS\n- Backup strategies",
+  video_url: "https://www.youtube.com/watch?v=mDRoyPFJvlU",
+  position: 2,
+  duration_minutes: 35
+)
+
+# Lessons for Security Training
+Lesson.create!(
+  training: t_security_basics,
+  title: "Password Security",
+  description: "Learn best practices for creating and managing secure passwords.",
+  content: "Passwords are your first line of defense. Learn how to create strong passwords and use password managers effectively.\n\nKey takeaways:\n- Creating unbreakable passwords\n- Why password managers are essential\n- Multi-factor authentication setup\n- Recognizing password attacks",
+  video_url: "https://www.youtube.com/watch?v=3NjQ9b3pgIg",
+  position: 0,
+  duration_minutes: 20
+)
+
+Lesson.create!(
+  training: t_security_basics,
+  title: "Phishing Prevention",
+  description: "Identify and prevent phishing attacks targeting you and your organization.",
+  content: "Phishing remains the most common attack vector. Learn to spot and avoid these attacks.\n\nWhat you'll learn:\n- Identifying phishing emails\n- URL inspection techniques\n- Reporting suspicious activity\n- Social engineering awareness",
+  video_url: "https://www.youtube.com/watch?v=Y7zNlEMDmI4",
+  position: 1,
+  duration_minutes: 25
+)
+
+Lesson.create!(
+  training: t_security_basics,
+  title: "Data Protection",
+  description: "Protect sensitive data in transit and at rest.",
+  content: "Safeguarding data is everyone's responsibility.\n\nTopics covered:\n- Data classification levels\n- Encryption basics\n- Secure file sharing\n- Clean desk policy",
+  video_url: "https://www.youtube.com/watch?v=6-0IB3FJfGE",
+  position: 2,
+  duration_minutes: 30
+)
+
 puts ""
 puts "✅ Seeding completed successfully!"
 puts ""
@@ -465,4 +603,5 @@ puts "📝 Total Enrollments: #{Enrollment.count} (#{Enrollment.completed.count}
 puts "🏅 Total Badges Awarded: #{UserBadge.count}"
 puts "📋 Total Assignments: #{Assignment.count}"
 puts "📤 Total Submissions: #{Submission.count}"
+puts "📺 Total Lessons: #{Lesson.count}"
 puts ""

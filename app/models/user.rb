@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :subordinates, class_name: "User", foreign_key: "manager_id"
   has_many :enrollments, dependent: :destroy
   has_many :trainings, through: :enrollments
+  has_many :lesson_progresses, dependent: :destroy
   has_many :submissions, dependent: :destroy
   has_many :user_badges, dependent: :destroy
   has_many :badges, through: :user_badges
